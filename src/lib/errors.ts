@@ -18,6 +18,37 @@ export function userMessage(err: AppError | null | undefined): string {
   return 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง'
 }
 
+/**
+ * Maps a Supabase auth error to an i18n key under `login.*`, so the login
+ * page can show the real reason instead of always claiming bad credentials.
+ * Returns a key (not text) so the message respects the active language.
+ */
+export function loginErrorKey(err: AppError | null | undefined): string {
+  if (!err) return 'login.err_generic'
+  const code = (err as { code?: string }).code ?? ''
+  const status = (err as { status?: number }).status
+  const name = (err as { name?: string }).name ?? ''
+  const msg = err.message ?? ''
+
+  // Network/fetch failures: supabase-js wraps these as AuthRetryableFetchError,
+  // and the browser surfaces "Failed to fetch" / "Load failed".
+  if (
+    name === 'AuthRetryableFetchError' ||
+    /failed to fetch|load failed|network/i.test(msg)
+  ) return 'login.err_network'
+
+  if (status === 429 || /rate limit/i.test(msg) || code.includes('rate_limit')) {
+    return 'login.err_rate_limit'
+  }
+  if (code === 'email_not_confirmed' || /email not confirmed/i.test(msg)) {
+    return 'login.err_unconfirmed'
+  }
+  if (code === 'invalid_credentials' || /invalid login credentials/i.test(msg)) {
+    return 'login.err_invalid'
+  }
+  return 'login.err_generic'
+}
+
 const COMMON = ['password', 'password1', '12345678', '123456789', 'qwerty123']
 
 export function passwordIssue(pw: string | null | undefined): string | null {
