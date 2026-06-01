@@ -5,9 +5,12 @@ The repo now ships with `vercel.json` (SPA rewrite + immutable cache for
 route is a real path now (`/settings`, `/pricing`, etc.), which means
 Vercel's SPA fallback is required for direct navigation.
 
-The old GitHub Pages workflow is still in `.github/workflows/deploy.yml`
-but its trigger is `workflow_dispatch` only — pushes no longer auto-
-deploy there.
+GitHub Pages is kept as a **live mirror**, not a retired path: its workflow
+(`.github/workflows/deploy.yml`) still auto-deploys on every push to `master`
+alongside Vercel. The Pages build sets `VITE_BASE_PATH=/chanthasy-stock/` so
+it serves from the project sub-path, while Vercel builds at root (`/`).
+Vercel is the primary origin; Pages is the backup/mirror at
+`https://teang459.github.io/chanthasy-stock/`.
 
 ## 1. Link the repo
 
@@ -69,19 +72,19 @@ When the domain (I1) is purchased:
 4. Update the Stripe webhook endpoint URL.
 5. (Optional) Add the domain to Sentry's allowed domains.
 
-## 6. Rolling back to GitHub Pages
+## 6. Promoting the GitHub Pages mirror to primary
 
-If Vercel ever needs to drop:
+Pages already builds and deploys live on every push (see the intro), so no
+code, router, or base-path change is required to fall back to it — the Pages
+build serves from `/chanthasy-stock/` via `VITE_BASE_PATH`, and `BrowserRouter`
++ `public/404.html` handle SPA deep links there. To make Pages canonical:
 
-1. `.github/workflows/deploy.yml` — change `on:` back to:
-   ```yaml
-   on:
-     push:
-       branches: [master]
-   ```
-2. `vite.config.js` — flip `base: '/'` back to `base: './'`.
-3. `src/App.jsx` — swap `BrowserRouter` for `HashRouter`.
-4. Edge Functions — restore the `/#/` prefix on `success_url`,
-   `cancel_url`, `return_url`, and the password-reset redirect.
+1. Point users at `https://teang459.github.io/chanthasy-stock/` (USER_GUIDE
+   already uses this URL).
+2. Set `APP_URL` in Supabase → Edge Function secrets to the Pages URL so the
+   password-reset and Stripe redirect targets resolve there.
+3. Update the Stripe webhook endpoint if it references the Vercel origin.
 
-Each of those is intentionally small to keep rollback cheap.
+> Before relying on Pages, sanity-check a direct deep link (e.g. open
+> `…/chanthasy-stock/stock` in a fresh tab) — the sub-path + redirect flow is
+> the part most likely to need attention.

@@ -1,10 +1,10 @@
 # Chanthasy Stock — Complete Roadmap
 
 **Project:** Chanthasy Stock — Plant Stock Management SaaS  
-**Stack:** React 18 + Vite + Supabase + GitHub Pages  
+**Stack:** React 18 + Vite + Supabase + Vercel (primary) + GitHub Pages (live mirror)  
 **Last Updated:** 2026-05-29  
 **Current Status:** Functional but not production-ready  
-**Deployment:** GitHub Pages (free) → Plan to migrate to Vercel
+**Deployment:** Vercel (primary, auto-deploy on push to master) + GitHub Pages live mirror (deploy.yml, also auto on push). Vercel migration: ✅ done.
 
 ## Sweep 2026-05-29 — verified state vs original roadmap
 
@@ -502,13 +502,10 @@ function displayPrice(priceInTHB, targetCurrency) {
 **Fix:** Move to CSS classes in `index.css`  
 **Effort:** 1-2 hours per file
 
-#### [M4] No CI Test/Lint Jobs
-**Issue:** `.github/workflows/deploy.yml` only runs build  
-**Fix:** Add steps:
-```yaml
-- run: npm run lint
-- run: npm test -- --run
-```
+#### [M4] No CI Test/Lint Jobs — ✅ DONE
+**Issue:** `.github/workflows/deploy.yml` previously only ran build  
+**Fix:** ✅ `deploy.yml` now runs lint → typecheck → test → build before
+publishing; `ci.yml` also gates lint/typecheck/test on every push and PR.  
 **Effort:** 30 minutes
 
 #### [M5] Low Test Coverage
@@ -517,10 +514,11 @@ function displayPrice(priceInTHB, targetCurrency) {
 **Effort:** 3-5 days  
 **Target:** >80% coverage on critical paths
 
-#### [M6] HashRouter Limits SEO
+#### [M6] HashRouter Limits SEO — ✅ DONE
 **Issue:** URLs like `site.com/#/stock` not SEO-friendly  
-**Fix:** Migrate to Vercel (supports SPA fallback) + BrowserRouter  
-**Effort:** 2-3 hours (in Phase 4)
+**Fix:** ✅ Migrated to `BrowserRouter` with real paths; Vercel `vercel.json`
+provides the SPA fallback, GitHub Pages mirror uses `public/404.html`.  
+**Effort:** 2-3 hours
 
 #### [M7] AuthContext Fetches AAL Too Often
 **Issue:** `getAuthenticatorAssuranceLevel()` called on every session event  
@@ -557,9 +555,9 @@ npm install @sentry/react
 ```
 **Effort:** 1-2 hours
 
-#### [I3] No Staging Environment
-**Status:** ❌ Push to master = production  
-**Action (Phase 4):** Migrate to Vercel → preview deployments on every PR  
+#### [I3] No Staging Environment — ✅ DONE
+**Status:** ✅ Vercel connected — every PR gets an automatic preview deployment.
+Production is Vercel on push to master, with GitHub Pages as a live mirror.  
 **Effort:** 2-3 hours
 
 ---
@@ -777,7 +775,7 @@ npm install html5-qrcode
 - [ ] B7: PO workflow (15h)
 - [ ] B8: Multi-warehouse (15h)
 - [ ] B9: Batch tracking (10h)
-- [ ] M6: Vercel migration (3h)
+- [x] M6: Vercel migration (3h) — ✅ done (Vercel primary + GitHub Pages mirror)
 - [ ] B19: Mobile app (50h+)
 
 ---

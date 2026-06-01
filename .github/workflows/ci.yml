@@ -1,7 +1,9 @@
 name: CI
 
-# Lint + test on every push and PR. Vercel handles deploy after merge
-# to master, but it doesn't gate on tests — this workflow is the gate.
+# Lint + test on every push and PR. Both deploys run automatically on push
+# to master — Vercel (primary origin) and GitHub Pages (live mirror, via
+# deploy.yml). Vercel does not gate on tests, so this workflow is its gate.
+# deploy.yml runs its own lint/typecheck/test before publishing to Pages.
 
 on:
   push:

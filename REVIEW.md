@@ -1,7 +1,7 @@
 # รายงานสถานะโครงการ Chanthasy Stock
 
 **โครงการ:** Chanthasy Stock — ระบบจัดการสต็อกต้นไม้ (Multi-tenant SaaS)
-**Stack:** React 18 + Vite + Supabase (Postgres + Auth + Storage + Edge Functions) + Vercel
+**Stack:** React 18 + Vite + Supabase (Postgres + Auth + Storage + Edge Functions) + Vercel (primary) + GitHub Pages (live mirror)
 **อัปเดตล่าสุด:** 2026-06-01
 **ผู้ตรวจ:** Claude (Opus 4.8)
 **ขอบเขต:** เทียบสถานะปัจจุบันกับรายการงานเดิมใน REVIEW (2026-05-24) และ `PRODUCTION_PLAN.md` (2026-05-22)
@@ -57,7 +57,7 @@
 
 ### Infrastructure
 - **I2 — Sentry error monitoring** (`src/lib/sentry.js`, no-op ถ้าไม่มี DSN) ✅
-- **I3/I4 — ย้าย hosting ไป Vercel** → preview deploy ต่อ PR + รองรับ SPA fallback ✅
+- **I3/I4 — Vercel เป็น primary host** → preview deploy ต่อ PR + รองรับ SPA fallback; เก็บ GitHub Pages เป็น live mirror (deploy.yml auto บน push) ✅
 - **M4 — CI workflow** (lint + test, GitHub Actions Node.js 24) ✅
 
 ---

@@ -1,7 +1,7 @@
 # แผนนำขึ้น Production — สถานะการปิดงาน (Production Plan)
 
 **โครงการ:** Chanthasy Stock — ระบบจัดการสต็อกต้นไม้
-**Stack:** React 18 + Vite + Supabase + Vercel
+**Stack:** React 18 + Vite + Supabase + Vercel (primary) + GitHub Pages (live mirror)
 **แผนเดิมเขียนเมื่อ:** 2026-05-22
 **อัปเดตสถานะล่าสุด:** 2026-06-01
 
