@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { userMessage, passwordIssue } from './errors'
+import { userMessage, passwordIssue, loginErrorKey } from './errors'
 
 describe('userMessage', () => {
   it('returns generic message for null/undefined', () => {
@@ -29,6 +29,34 @@ describe('userMessage', () => {
 
   it('falls back to generic message for unknown errors', () => {
     expect(userMessage({ message: 'Something weird' })).toMatch(/เกิดข้อผิดพลาด/)
+  })
+})
+
+describe('loginErrorKey', () => {
+  it('maps invalid credentials by code and by message', () => {
+    expect(loginErrorKey({ code: 'invalid_credentials' })).toBe('login.err_invalid')
+    expect(loginErrorKey({ message: 'Invalid login credentials' })).toBe('login.err_invalid')
+  })
+
+  it('maps rate limiting by 429 status, code, and message', () => {
+    expect(loginErrorKey({ status: 429 })).toBe('login.err_rate_limit')
+    expect(loginErrorKey({ code: 'over_request_rate_limit' })).toBe('login.err_rate_limit')
+    expect(loginErrorKey({ message: 'Email rate limit exceeded' })).toBe('login.err_rate_limit')
+  })
+
+  it('maps network/fetch failures', () => {
+    expect(loginErrorKey({ name: 'AuthRetryableFetchError' })).toBe('login.err_network')
+    expect(loginErrorKey({ message: 'Failed to fetch' })).toBe('login.err_network')
+  })
+
+  it('maps unconfirmed email', () => {
+    expect(loginErrorKey({ code: 'email_not_confirmed' })).toBe('login.err_unconfirmed')
+    expect(loginErrorKey({ message: 'Email not confirmed' })).toBe('login.err_unconfirmed')
+  })
+
+  it('falls back to generic for null and unknown errors', () => {
+    expect(loginErrorKey(null)).toBe('login.err_generic')
+    expect(loginErrorKey({ message: 'Something weird' })).toBe('login.err_generic')
   })
 })
 

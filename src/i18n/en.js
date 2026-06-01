@@ -123,6 +123,10 @@ export default {
     err_invalid: 'Wrong email or password',
     err_need_email: 'Please enter your email',
     err_need_password: 'Please enter your password',
+    err_rate_limit: 'Too many attempts. Please wait a moment and try again',
+    err_network: 'Network error. Check your connection and try again',
+    err_unconfirmed: 'Your email is not confirmed yet. Check your inbox',
+    err_generic: 'Something went wrong. Please try again',
   },
 
   settings: {

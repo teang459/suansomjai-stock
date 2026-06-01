@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
-import { userMessage } from '../lib/errors'
+import { userMessage, loginErrorKey } from '../lib/errors'
 import { useT } from '../i18n'
 import LanguageSwitcher from '../components/LanguageSwitcher'
 import * as I from '../components/Icons'
@@ -33,7 +33,7 @@ export default function LoginPage() {
     try {
       await login(email.trim(), password)
     } catch (err) {
-      setError(t('login.err_invalid'))
+      setError(t(loginErrorKey(err)))
     } finally {
       setLoading(false)
     }
