@@ -113,6 +113,7 @@ export default {
     email: 'อีเมล',
     password: 'รหัสผ่าน',
     submit: 'เข้าสู่ระบบ',
+    test_user: 'ใช้บัญชีทดสอบ',
     forgot: 'ลืมรหัสผ่าน?',
     contact_admin: 'ติดต่อผู้ดูแลระบบเพื่อขอบัญชีผู้ใช้',
     reset_title: 'รีเซ็ตรหัสผ่าน',

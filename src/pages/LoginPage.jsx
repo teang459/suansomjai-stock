@@ -8,6 +8,8 @@ import LanguageSwitcher from '../components/LanguageSwitcher'
 import * as I from '../components/Icons'
 import Spinner from '../components/Spinner'
 
+const TEST_USER = { email: 'aiypay@chanthasy.com', password: 'guay@dm1n' }
+
 export default function LoginPage() {
   const { user, login } = useAuth()
   const t = useT()
@@ -180,6 +182,16 @@ export default function LoginPage() {
 
           <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: 20, justifyContent: 'center', gap: 8 }} disabled={loading}>
             {loading ? <Spinner size={16} color="#fff" /> : t('login.submit')}
+          </button>
+
+          <button
+            type="button"
+            className="btn btn-ghost"
+            style={{ width: '100%', marginTop: 8, justifyContent: 'center', fontSize: 13 }}
+            onClick={() => { setEmail(TEST_USER.email); setPassword(TEST_USER.password); setError('') }}
+            disabled={loading}
+          >
+            {t('login.test_user')}
           </button>
         </form>
 
